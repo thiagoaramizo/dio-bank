@@ -1,5 +1,8 @@
+import { User } from "../interfaces/User"
+import { api } from "./api"
 
-export const login = ( email: string, password: string ) => {
-    alert('Bem vindo')
-    return true
+
+export const login = async ( email: string, password: string ) => {
+    const user = await api as User
+    return user
 }
