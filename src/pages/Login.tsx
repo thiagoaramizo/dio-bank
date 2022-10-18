@@ -1,18 +1,33 @@
 import { Input, Button, Box, Flex, Heading, Text } from "@chakra-ui/react"
-import { Dispatch, SetStateAction, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { AppContext } from "../context/AppContext"
 import { User } from "../interfaces/User"
-import { login } from "../services/login"
+import { api } from "../services/api"
+import { createStorage } from "../services/storage"
 
-interface LoginProps {
-    setUser: Dispatch<SetStateAction<User | undefined>>
-}
-
-export const LoginForm = ( {setUser}: LoginProps) => {
+export const Login = () => {
 
     const [email, setEmail] = useState<string>()
     const [erroEmail, setErroEmail] = useState<string>()
     const [password, setPassword] = useState<string>()
-    
+    const navigate = useNavigate()
+    const { setIsLoggedIn, isLoggedIn } = useContext( AppContext )
+
+    useEffect( () => {
+        isLoggedIn && navigate('/home')
+    }, [isLoggedIn])
+
+    const login = async ( email: string, password: string ) => {
+        //TODO alterar para validadr na API
+        api.then( ( apiUser ) => {
+            setIsLoggedIn(true)
+            createStorage( '12345' )
+            return true
+        }).catch( () => {
+            return false
+        })        
+    }
 
     const validarEmail = ( email: string ) => {
         const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -26,7 +41,7 @@ export const LoginForm = ( {setUser}: LoginProps) => {
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault()
         if (email && password) {
-            setUser( await login(email, password))
+            login(email, password)
         } else {
             alert('Informe seu email e senha para realizar o login.')
         }

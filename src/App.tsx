@@ -1,31 +1,33 @@
 import { Box, ChakraProvider } from '@chakra-ui/react'
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useContext } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 
 import { Layout } from './components/Layout'
-import { LoginForm } from './pages/LoginForm'
-import { User } from './interfaces/User'
+import { Login } from './pages/Login'
 import { Home } from './pages/Home'
-
+import { AppContext, AppContextProvider } from './context/AppContext'
+import { NotFound } from './pages/NotFound'
+import { getStorage } from './services/storage'
 
 function App() {
 
-  const [user, setUser] = useState<User>()
-
   return (
     <ChakraProvider>
-      <Box minHeight='100vh' backgroundColor='gray.800' textColor='gray.300'>
-        <Layout user={user} setUser={setUser}>
-          <BrowserRouter>
-            <Routes>
-              <Route path='/' element={ 
-                user? <Home user={user}/> : <LoginForm setUser={setUser}/>
-              }></Route>
-            </Routes>
-          </BrowserRouter>
-        </Layout>
-      </Box>
+      <AppContextProvider>
+        <BrowserRouter>
+          <Box minHeight='100vh' backgroundColor='gray.800' textColor='gray.300'>
 
+            <Layout>
+              <Routes>
+                <Route path='/' element={ <Login />} />
+                <Route path='/home' element={<Home />} />
+                <Route path='*' element={<NotFound />} />
+              </Routes>
+            </Layout>
+
+          </Box>
+        </BrowserRouter>
+      </AppContextProvider>
     </ChakraProvider>
   )
 }

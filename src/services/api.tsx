@@ -10,5 +10,5 @@ const user: User = {
 export const api = new Promise<User>( (resolve)=> {
     setTimeout( () => {
         resolve( user )
-    }, 5000)
+    }, 500)
 })

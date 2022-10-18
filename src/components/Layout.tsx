@@ -1,21 +1,19 @@
-import { Box, Flex, Grid } from "@chakra-ui/react"
-import { Dispatch, ReactNode, SetStateAction } from "react"
+import { Box, Grid } from "@chakra-ui/react"
+import { ReactNode } from "react"
 import styled from "styled-components"
-import { User } from "../interfaces/User"
 import { Footer } from "./Footer"
 import { Header } from "./Header"
 
 interface LayoutProps {
-    children: ReactNode,
-    user: User | undefined,
-    setUser: Dispatch<SetStateAction<User | undefined>>
+    children: ReactNode
 }
 
-export const Layout = ( {children, user, setUser}: LayoutProps) => {
+export const Layout = ( {children }: LayoutProps) => {
+
     return (
         <LayoutWrapper>
             <Grid gridTemplateColumns={'100vw'} minHeight='100vh' >
-                <Header user={user} setUser={setUser}/>
+                <Header/>
                 <Box p='32px'>
                     {children}
                 </Box>
